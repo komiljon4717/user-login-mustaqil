@@ -1,8 +1,4 @@
 
-# name
-# login
-# password
-# age
 import mysql.connector
 
 mydb = mysql.connector.connect(
@@ -81,7 +77,7 @@ class User:
             get_age = input("Yoshingizni kiriting: ").strip()
 
         self.add_class(get_name, get_login, get_password, get_age)
-
+        self.write_to_base()
 
     def add_class(self, get_name, get_login, get_password, get_age):
         self.name = get_name
@@ -89,7 +85,10 @@ class User:
         self.password = get_password
         self.age = get_age
 
-        print("All right")
+    def write_to_base(self):
+        mycursor = mydb.cursor()
+        mycursor.execute(f"insert into users values (null, '{self.name}', '{self.login}', '{self.password}', '{self.age}')")
+        mydb.commit()
 
     def log_in(self):
         print("login part")
