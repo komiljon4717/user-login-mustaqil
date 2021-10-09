@@ -73,15 +73,24 @@ class User:
             get_password = input("Parolni kiriting: ").strip()
             check_password = input("Yana bir bor parolni kiriting: ").strip()
 
-        
+
         get_age = input("Yoshingizni kiriting: ").strip()
         while not get_age.isnumeric():
             self.clear_everything()
             print("Noto'g'ri qiymat kiritdingiz. Iltimos faqat raqm kiriting:")
             get_age = input("Yoshingizni kiriting: ").strip()
 
+        self.add_class(get_name, get_login, get_password, get_age)
 
-        
+
+    def add_class(self, get_name, get_login, get_password, get_age):
+        self.name = get_name
+        self.login = get_login
+        self.password = get_password
+        self.age = get_age
+
+        print("All right")
+
     def log_in(self):
         print("login part")
 
