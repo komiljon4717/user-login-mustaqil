@@ -63,22 +63,25 @@ class User:
 
         get_password = input("Parolni kiriting: ").strip()
         check_password = input("Yana bir bor parolni kiriting: ").strip()
-        while self.is_srt_empyt(get_password) or len(get_password) < self.password_min_len or get_password != check_password:
+        while self.is_srt_empty(get_password) or len(get_password) < self.password_min_len or get_password != check_password:
+            self.clear_everything()
             print("Noto'g'ri belgi kiritdingiz.")
             print("-Kiritilgan parol bo'sh")
             print("-Kiritilgan parollar bir xil emas")
             print(f"-Parol {self.password_min_len} dan kam bo'lmasligi kerak")
-            
+
             get_password = input("Parolni kiriting: ").strip()
             check_password = input("Yana bir bor parolni kiriting: ").strip()
 
         
-        get_age = input("Yoshingizni kiriting: ")
+        get_age = input("Yoshingizni kiriting: ").strip()
+        while not get_age.isnumeric():
+            self.clear_everything()
+            print("Noto'g'ri qiymat kiritdingiz. Iltimos faqat raqm kiriting:")
+            get_age = input("Yoshingizni kiriting: ").strip()
 
-        print(get_name)
-        print(get_login)
-        print(get_password)
-        print(get_age)
+
+        
     def log_in(self):
         print("login part")
 
@@ -107,7 +110,7 @@ class User:
         os.system("clear")
 
     @staticmethod
-    def is_srt_empyt(self, string):
+    def is_srt_empty(string):
         return not string
 
 
