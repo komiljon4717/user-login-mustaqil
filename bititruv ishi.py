@@ -22,6 +22,7 @@ class User:
         self.password = password
         self.age = age
         self.choose = ['1', '2']
+        self.password_min_len = 6
 
     def entering_system(self):
         self.choose_parts()
@@ -60,7 +61,17 @@ class User:
             print("-Bu login mavjud")
             get_login = input("Login kiriting: ").strip()
 
-        get_password = input("Parolni kiriting: ").lower().strip()
+        get_password = input("Parolni kiriting: ").strip()
+        check_password = input("Yana bir bor parolni kiriting: ").strip()
+        while self.is_srt_empyt(get_password) or len(get_password) < self.password_min_len or get_password != check_password:
+            print("Noto'g'ri belgi kiritdingiz.")
+            print("-Kiritilgan parol bo'sh")
+            print("-Kiritilgan parollar bir xil emas")
+            print(f"-Parol {self.password_min_len} dan kam bo'lmasligi kerak")
+            
+            get_password = input("Parolni kiriting: ").strip()
+            check_password = input("Yana bir bor parolni kiriting: ").strip()
+
         
         get_age = input("Yoshingizni kiriting: ")
 
@@ -95,6 +106,9 @@ class User:
     def clear_everything():
         os.system("clear")
 
+    @staticmethod
+    def is_srt_empyt(self, string):
+        return not string
 
 
 
