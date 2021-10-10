@@ -91,7 +91,47 @@ class User:
         mydb.commit()
 
     def log_in(self):
-        print("login part")
+        get_login = input("Login kiriting: ").strip()
+        get_password = input("Parolni kiriting: ").strip()
+        mycursor = mydb.cursor()
+        mycursor.execute(f"select password from users where login = '{get_login}'")
+        all_data = str(mycursor.fetchall())
+        all_data = all_data.strip("[ ( ' ' , ) ]")
+        while not self.user_exists(get_login) or all_data != get_password:
+            self.clear_everything()
+            print("Login yoki parol xato, Iltimos qaytadan kiriting")
+            get_login = input("Login kiriting: ").strip()
+            get_password = input("Parolni kiriting: ").strip()
+
+
+        self.clear_everything()
+        print("""
+                    Tizimga hush kelibsiz!
+                    """)
+        self.update_login()
+
+
+
+
+
+
+        # get_login = input("Login kiriting: ").strip()
+        # while not self.user_exists(get_login):
+        #     self.clear_everything()
+        #     print("login xato")
+        #
+        # get_password = input("Parolni kiriting: ").strip()
+        # mycursor = mydb.cursor()
+        # mycursor.execute(f"select password from users where login = '{get_login}'")
+        # all_data = str(mycursor.fetchall())
+        # all_data = all_data.strip("[ ( ' ' , ) ]")
+        # while all_data != get_password:
+        #     self.clear_everything()
+        #     print("Parolni xato kiritdingiz")
+        #     get_password = input("Parolni qaytadan kiriting: ").strip()
+
+
+
 
     def log_out(self):
         pass
