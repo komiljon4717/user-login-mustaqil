@@ -95,6 +95,7 @@ class User:
         mycursor.execute(f"insert into users values (null, '{self.name}', '{self.login}', '{self.password}', '{self.age}')")
         mydb.commit()
 
+        self.mass_log_out()
 
         # log_in qismi
 
@@ -112,6 +113,17 @@ class User:
             print("Noto'g'ri parol kiritdingiz!: ")
             get_password = input("Parolni kiriting: ").strip()
 
+        self.login = get_login
+        self.password = get_password
+
+
+
+
+
+
+
+
+
         self.clear_everything()
         self.mass_update_log_or_pass()
         up_log_or_pass = input("[1/2]:").strip()
@@ -122,9 +134,9 @@ class User:
             up_log_or_pass = input("[1/2]:").strip()
 
         if up_log_or_pass is self.choose[0]:
-                self.update_login()
+            self.update_login()
         else:
-                self.update_password()
+            self.update_password()
 
     def mass_update_log_or_pass(self):
         print(f"""
@@ -138,10 +150,16 @@ class User:
         os.system("exit")
 
     def update_login(self):
-        get_login = input("Loginni kiriting: ").strip().lower()
         new_login = input("Yangi loginni kiriting: ").strip().lower()
+        while not new_login.isalnum() or self.user_exists(new_login):
+            self.clear_everything()
+            print("Noto'g'ri belgi kiritdingiz")
+            print("-Loginda faqat harf yoki/va raqamlar bo'lishi kerak")
+            print("-Bu login mavjud")
+            new_login = input("Login kiriting: ").strip()
+
         mycursor = mydb.cursor()
-        mycursor.execute(f"update users set login='{new_login}' where login='{get_login}'")
+        mycursor.execute(f"update users set login='{new_login}' where login='{self.login}'")
         mydb.commit()
 
         self.mass_log_out()
@@ -156,10 +174,21 @@ class User:
             return False
 
     def update_password(self):
-        get_password = input("Parolni kiriting: ").strip()
-        new_password = input("Yangi parol kiriting: ").strip()
+        new_password = input("Yangi parolni kiriting: ").strip()
+        check_password = input("Yangi parolni yana bir bor parolni kiriting: ").strip()
+        while self.is_srt_empty(new_password) or len(
+                new_password) < self.password_min_len or new_password != check_password:
+            self.clear_everything()
+            print("Noto'g'ri belgi kiritdingiz.")
+            print("-Kiritilgan parol bo'sh")
+            print("-Kiritilgan parollar bir xil emas")
+            print(f"-Parol {self.password_min_len} dan kam bo'lmasligi kerak")
+
+            new_password = input("Parolni kiriting: ").strip()
+            check_password = input("Yana bir bor parolni kiriting: ").strip()
+
         mycursor = mydb.cursor()
-        mycursor.execute(f"update users set password='{new_password}' where password='{get_password}'")
+        mycursor.execute(f"update users set password='{new_password}' where password='{self.password}'")
         mydb.commit()
 
         self.mass_log_out()
@@ -177,7 +206,6 @@ class User:
             get_password = input("Parolni kiriting: ").strip()
 
         mycursor = mydb.cursor()
-        # mycursor.execute(f"select ID from users where password='{get_password}'")
         mycursor.execute(f"DELETE FROM users WHERE password = '{get_password}'")
         mydb.commit()
 
@@ -226,5 +254,6 @@ class User:
 person = User()
 person.entering_system()
 
+os.system("clear")
 print("Siz tizimdan chiqdingiz")
 
