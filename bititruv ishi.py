@@ -42,6 +42,10 @@ class User:
                 Login       [{self.choose[1]}]
                 """)
 
+
+        # Registratsiya qismi
+
+
     def register(self):
         get_name = input("Ismingizni kiriting: ").capitalize().strip()
         while not get_name.isalpha():
@@ -90,6 +94,10 @@ class User:
         mycursor.execute(f"insert into users values (null, '{self.name}', '{self.login}', '{self.password}', '{self.age}')")
         mydb.commit()
 
+
+        # log_in qismi
+
+
     def log_in(self):
         get_login = input("Login kiriting: ").strip().lower()
         while not self.user_exists(get_login):
@@ -117,21 +125,19 @@ class User:
         else:
                 self.update_password()
 
-
-        self.update_login()
     def mass_update_log_or_pass(self):
         print(f"""
                 Tizimga hush kelibsiz:
                 Login yoki parolni yangilashni hoxlaysizmi?
                 Loginni o'zgartirish    [{self.choose[0]}]
-                Parolni o'zgartirish       [{self.choose[1]}]
+                Parolni o'zgartirish    [{self.choose[1]}]
                 """)
 
     def log_out(self):
         pass
 
     def update_login(self):
-        get_login = input("Login kiriting: ").strip().lower()
+        get_login = input("Loginni kiriting: ").strip().lower()
         new_login = input("Yangi loginni kiriting: ").strip().lower()
         mycursor = mydb.cursor()
         mycursor.execute(f"update users set login='{new_login}' where login='{get_login}'")
@@ -147,7 +153,12 @@ class User:
             return False
 
     def update_password(self):
-        print("password update")
+        get_password = input("Parolni kiriting: ").strip()
+        new_password = input("Yangi parol kiriting: ").strip()
+        mycursor = mydb.cursor()
+        mycursor.execute(f"update users set password='{new_password}' where password='{get_password}'")
+        mydb.commit()
+
 
     def delete_account(self):
         pass
