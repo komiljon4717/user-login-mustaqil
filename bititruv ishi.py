@@ -91,53 +91,51 @@ class User:
         mydb.commit()
 
     def log_in(self):
-        get_login = input("Login kiriting: ").strip()
-        get_password = input("Parolni kiriting: ").strip()
-        mycursor = mydb.cursor()
-        mycursor.execute(f"select password from users where login = '{get_login}'")
-        all_data = str(mycursor.fetchall())
-        all_data = all_data.strip("[ ( ' ' , ) ]")
-        while not self.user_exists(get_login) or all_data != get_password:
+        get_login = input("Login kiriting: ").strip().lower()
+        while not self.user_exists(get_login):
             self.clear_everything()
-            print("Login yoki parol xato, Iltimos qaytadan kiriting")
-            get_login = input("Login kiriting: ").strip()
+            print("Noto'g'ri login kiritdingiz!")
+            get_login = input("Login kiriting: ").strip().lower()
+
+        get_password = input("Parolni kiriting: ").strip()
+        while not self.is_all_match(get_login, get_password):
+            self.clear_everything()
+            print("Noto'g'ri parol kiritdingiz!: ")
             get_password = input("Parolni kiriting: ").strip()
 
-
         self.clear_everything()
-        print("""
-                    Tizimga hush kelibsiz!
-                    """)
+        self.mass_update_log_or_pass()
+        reg_or_log = input("[1/2]:").strip()
+        while reg_or_log not in self.choose:
+            self.clear_everything()
+            print("Noto'g'ri belgi kiritdingiz. Iltimos quyidagi belgilardan birini tanlang:")
+            self.mass_update_log_or_pass()
+            reg_or_log = input("[1/2]:").strip()
+
+        if reg_or_log is self.choose[0]:
+                self.update_login()
+        else:
+                self.update_password()
+
+
         self.update_login()
-
-
-
-
-
-
-        # get_login = input("Login kiriting: ").strip()
-        # while not self.user_exists(get_login):
-        #     self.clear_everything()
-        #     print("login xato")
-        #
-        # get_password = input("Parolni kiriting: ").strip()
-        # mycursor = mydb.cursor()
-        # mycursor.execute(f"select password from users where login = '{get_login}'")
-        # all_data = str(mycursor.fetchall())
-        # all_data = all_data.strip("[ ( ' ' , ) ]")
-        # while all_data != get_password:
-        #     self.clear_everything()
-        #     print("Parolni xato kiritdingiz")
-        #     get_password = input("Parolni qaytadan kiriting: ").strip()
-
-
-
+    def mass_update_log_or_pass(self):
+        print(f"""
+                Tizimga hush kelibsiz:
+                Login yoki parolni yangilashni hoxlaysizmi?
+                Loginni o'zgartirish    [{self.choose[0]}]
+                Parolni o'zgartirish       [{self.choose[1]}]
+                """)
 
     def log_out(self):
         pass
 
     def update_login(self):
-        pass
+        get_login = input("Login kiriting: ").strip().lower()
+        new_login = input("Yangi loginni kiriting: ").strip().lower()
+        mycursor = mydb.cursor()
+        mycursor.execute(f"update users set  login = '{new_login} where login='{get_login}'")
+        mydb.commit()
 
     def user_exists(self, input_login):
         mycursor = mydb.cursor()
@@ -149,7 +147,7 @@ class User:
             return False
 
     def update_password(self):
-        pass
+        print("password update")
 
     def delete_account(self):
         pass
@@ -161,6 +159,14 @@ class User:
     def is_srt_empty(string):
         return not string
 
+    def is_all_match(self, get_login, get_password):
+        mycursor = mydb.cursor()
+        mycursor.execute(f"select name from users where login = '{get_login}' and password='{get_password}'")
+        all_data = mycursor.fetchall()
+        if all_data:
+            return True
+        else:
+            return False
 
 
 
