@@ -134,7 +134,7 @@ class User:
                 """)
 
     def log_out(self):
-        print("logout")
+        os.system("exit")
 
     def update_login(self):
         get_login = input("Loginni kiriting: ").strip().lower()
@@ -209,4 +209,5 @@ class User:
 
 person = User()
 person.entering_system()
+print("Siz tizimdan chiqdingiz")
 
