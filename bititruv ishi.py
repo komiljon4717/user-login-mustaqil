@@ -134,7 +134,7 @@ class User:
         get_login = input("Login kiriting: ").strip().lower()
         new_login = input("Yangi loginni kiriting: ").strip().lower()
         mycursor = mydb.cursor()
-        mycursor.execute(f"update users set  login = '{new_login} where login='{get_login}'")
+        mycursor.execute(f"update users set login='{new_login}' where login='{get_login}'")
         mydb.commit()
 
     def user_exists(self, input_login):
