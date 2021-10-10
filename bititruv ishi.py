@@ -1,5 +1,6 @@
 
 import mysql.connector
+import os
 
 mydb = mysql.connector.connect(
             host="localhost",
@@ -7,7 +8,7 @@ mydb = mysql.connector.connect(
             passwd="123456789",
             database="DANG"
 )
-import os
+
 
 
 
@@ -164,7 +165,21 @@ class User:
         self.mass_log_out()
 
     def delete_account(self):
-        print("delet")
+        self.clear_everything()
+        get_password = input("Parolni kiriting: ").strip()
+        mycursor = mydb.cursor()
+        mycursor.execute(f"select ID from users where password='{get_password}'")
+        all_data = str(mycursor.fetchall())
+
+        while self.is_srt_empty(all_data):
+            self.clear_everything()
+            print("Parol xato qaytadan kiriting")
+            get_password = input("Parolni kiriting: ").strip()
+
+        mycursor = mydb.cursor()
+        # mycursor.execute(f"select ID from users where password='{get_password}'")
+        mycursor.execute(f"DELETE FROM users WHERE password = '{get_password}'")
+        mydb.commit()
 
     @staticmethod
     def clear_everything():
@@ -182,6 +197,7 @@ class User:
             return True
         else:
             return False
+
     def mass_log_out(self):
         self.clear_everything()
         print(f"""
@@ -209,5 +225,6 @@ class User:
 
 person = User()
 person.entering_system()
+
 print("Siz tizimdan chiqdingiz")
 
