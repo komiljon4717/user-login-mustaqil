@@ -113,14 +113,14 @@ class User:
 
         self.clear_everything()
         self.mass_update_log_or_pass()
-        reg_or_log = input("[1/2]:").strip()
-        while reg_or_log not in self.choose:
+        up_log_or_pass = input("[1/2]:").strip()
+        while up_log_or_pass not in self.choose:
             self.clear_everything()
             print("Noto'g'ri belgi kiritdingiz. Iltimos quyidagi belgilardan birini tanlang:")
             self.mass_update_log_or_pass()
-            reg_or_log = input("[1/2]:").strip()
+            up_log_or_pass = input("[1/2]:").strip()
 
-        if reg_or_log is self.choose[0]:
+        if up_log_or_pass is self.choose[0]:
                 self.update_login()
         else:
                 self.update_password()
@@ -134,7 +134,7 @@ class User:
                 """)
 
     def log_out(self):
-        pass
+        print("logout")
 
     def update_login(self):
         get_login = input("Loginni kiriting: ").strip().lower()
@@ -142,6 +142,8 @@ class User:
         mycursor = mydb.cursor()
         mycursor.execute(f"update users set login='{new_login}' where login='{get_login}'")
         mydb.commit()
+
+        self.mass_log_out()
 
     def user_exists(self, input_login):
         mycursor = mydb.cursor()
@@ -159,9 +161,11 @@ class User:
         mycursor.execute(f"update users set password='{new_password}' where password='{get_password}'")
         mydb.commit()
 
+        self.mass_log_out()
 
     def delete_account(self):
-        pass
+        print("delet")
+
     @staticmethod
     def clear_everything():
         os.system("clear")
@@ -178,6 +182,28 @@ class User:
             return True
         else:
             return False
+    def mass_log_out(self):
+        self.clear_everything()
+        print(f"""
+        
+        Tizimdan chiqishni hoxlaysizmi 
+        yoki accountni o'chirasizmi?
+        
+        Tizimdan chiqish        [{self.choose[0]}]
+        Akkountni o'chirish     [{self.choose[1]}]
+        
+        """)
+        logout_or_del = input("[1/2]:").strip()
+        while logout_or_del not in self.choose:
+            self.clear_everything()
+            print("Noto'g'ri belgi kiritdingiz. Iltimos quyidagi belgilardan birini tanlang:")
+            logout_or_del = input("[1/2]:").strip()
+
+        if logout_or_del is self.choose[0]:
+            self.log_out()
+        else:
+            self.delete_account()
+
 
 
 
