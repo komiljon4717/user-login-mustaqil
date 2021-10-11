@@ -55,7 +55,7 @@ class User:
             get_name = input("Ismingizni kiriting: ").capitalize().strip()
 
         get_login = input("Login kiriting: ").strip()
-        while not get_login.isalnum() or self.user_exists(get_login):
+        while not get_login.isalnum() or self.user_exists(get_login) or self.is_srt_empty(get_login):
             self.clear_everything()
             print("Noto'g'ri belgi kiritdingiz")
             print("-Loginda faqat harf yoki/va raqamlar bo'lishi kerak")
